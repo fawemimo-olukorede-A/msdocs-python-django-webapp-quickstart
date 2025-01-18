@@ -1,4 +1,7 @@
-  **Overview**
+
+ **Overview**
+
+ 
 This architecture is designed for deploying a Python-based web application (e.g., Django) in a highly scalable and efficient manner using Azure Kubernetes Service (AKS). The solution integrates continuous integration and deployment (CI/CD) pipelines using GitHub Actions and leverages Azure services for security, scalability, and traffic management.
 
 Components and Roles
@@ -49,3 +52,14 @@ AKS Subnet: Hosts the AKS cluster.
 AppGW Subnet: Hosts the Application Gateway.
 Features:
 Network policies enforce communication only between authorized components.
+
+**User Flow**
+
+
+The user flow begins when developers work on the Django application and make updates or changes to the codebase. These updates are pushed to a GitHub repository, which acts as the central hub for managing the application’s code. The push triggers an automated process, known as continuous integration, powered by GitHub Actions. During this phase, the code undergoes testing to ensure its quality and functionality. If the tests pass, the application is packaged into a Docker container using a pre-defined Dockerfile.
+
+This containerized application is then sent to the Azure Container Registry (ACR), which securely stores the Docker images. Once the image is stored, another automated process deploys the latest image to an Azure Kubernetes Service (AKS) cluster. The AKS cluster runs the application in multiple containers (or pods) to ensure it can handle user traffic efficiently.
+
+When end-users access the application, their requests are routed through the Azure Application Gateway. The gateway, which manages all incoming traffic, checks for security risks using a web application firewall and handles secure connections through SSL/TLS. After verifying the requests, the gateway forwards them to the AKS cluster. The cluster's service load balancer directs each request to an appropriate application pod, ensuring the workload is distributed evenly.
+
+As user traffic fluctuates, the AKS cluster dynamically scales the number of application pods to maintain performance. This ensures that the system handles both peak and low traffic efficiently, providing a seamless experience for end-users. The entire flow—from development to deployment to user access—is designed to be automated, secure, and scalable, ensuring reliability and high availability of the application.
